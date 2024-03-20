@@ -14,7 +14,8 @@ This repository is the official implementation of HPNet: Dynamic Trajectory Fore
 ## Getting Started
 1. Clone this repository:
 '''
-
+git clone https://github.com/XiaolongTang23/HPNet.git
+cd HPNet
 '''
 3. 
 
