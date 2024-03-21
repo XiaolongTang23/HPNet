@@ -62,7 +62,7 @@ python test.py --root /path/to/dataset_root/ --test_batch_size 2 --devices 1 --c
 ```
 
 ## Checkpoint & Results
-We provide a [pre-trained model](https://drive.google.com/file/d/1PqOw3t3-Tf2v6nlqz2bqr0NjYIw_YJwK/view?usp=drive_link), and its result on Argoverse is:
+We provide a [pre-trained model](https://drive.google.com/file/d/1PqOw3t3-Tf2v6nlqz2bqr0NjYIw_YJwK/view?usp=drive_link) on Argoverse, and its results are:
 | Split | brier-minFDE | minnFDE | MR | minADE |
 |----------|:----------:|:----------:|:----------:|:----------:|
 | Val | 1.5060 | 0.8708 | 0.0685 | 0.6378 |
