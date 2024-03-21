@@ -77,6 +77,7 @@ If you found this repo useful to your research, please consider citing our work:
   booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
   year={2024}
 }
+```
 
 ## Acknowledgement
 We sincerely appreciate [QCNet](https://github.com/ZikangZhou/QCNet) and [HiVT](https://github.com/ZikangZhou/HiVT) for their awesome codebases.
