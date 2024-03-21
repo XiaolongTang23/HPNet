@@ -32,12 +32,18 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
 
 ## Training
 ```bash
-
+python train.py --root /path/to/dataset_root/ --train_batch_size 2 --val_batch_size 2 --devices 8
 ```
 
 ## Validation
+```bash
+python val.py --root /path/to/dataset_root/ --val_batch_size 2 --devices 8 --ckpt_path /path/to/checkpoint.ckpt 
+```
 
 ## Testing
+```bash
+python test.py --root /path/to/dataset_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt 
+```
 
 ## Pre-trained Model
 
