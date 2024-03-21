@@ -77,5 +77,12 @@ If you found this repo useful to your research, please consider citing our work:
   year={2024}
 }
 ```
-
-
+This repository is developed based on [Query-Centric Trajectory Prediction](https://github.com/ZikangZhou/QCNet). Please also consider citing:
+```
+@inproceedings{zhou2023query,
+  title={Query-Centric Trajectory Prediction},
+  author={Zhou, Zikang and Wang, Jianping and Li, Yung-Hui and Huang, Yu-Kai},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year={2023}
+}
+```
