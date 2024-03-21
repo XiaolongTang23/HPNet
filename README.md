@@ -27,7 +27,20 @@ conda install pytorch-lightning==2.0.3
 ```
 If necessary, you can try combinations of different versions of Python, PyTorch, PyG (PyTorch Geometric), and PyTorch Lightning. For instance, I have successfully tested the project with PyTorch version `1.12.1`, and it worked as well.
 
-3. Download [Argoverse Motion Forecasting Dataset v1.1](https://www.argoverse.org/av1.html#download-link), extract the Dataset Files, and [install Argoverse API](https://github.com/argoverse/argoverse-api).
+3. Download [Argoverse Motion Forecasting Dataset v1.1](https://www.argoverse.org/av1.html#download-link), extract the Dataset Files, and [install Argoverse API](https://github.com/argoverse/argoverse-api) The dataset directory should be organized as follows:
+```bash
+/path/to/dataset_root/
+├── train/
+|   └── data/
+|       ├── 1.csv
+|       ├── 2.csv
+|       ├── ...
+└── val/
+    └── data/
+        ├── 1.csv
+        ├── 2.csv
+        ├── ...
+```
 
 ## Training
 For the initial training, data preprocessing may take several hours. Training on 8 RTX 4090 GPUs, one epoch takes about 30 minutes.
@@ -37,12 +50,12 @@ python train.py --root /path/to/dataset_root/ --train_batch_size 2 --val_batch_s
 
 ## Validation
 ```bash
-python val.py --root path/to/dataset_root --val_batch_size 2 --devices 8 --ckpt_path path/to/checkpoint.ckpt 
+python val.py --root /path/to/dataset_root/ --val_batch_size 2 --devices 8 --ckpt_path /path/to/checkpoint.ckpt 
 ```
 
 ## Testing
 ```bash
-python test.py --root path/to/dataset_root --test_batch_size 2 --devices 1 --ckpt_path path/to/checkpoint.ckpt 
+python test.py --root /path/to/dataset_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt 
 ```
 
 ## Checkpoint & Results
