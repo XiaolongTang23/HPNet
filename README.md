@@ -25,9 +25,6 @@ conda install pytorch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 pytorch-cuda=
 pip install torch_geometric==2.3.1
 conda install pytorch-lightning==2.0.3
 ```
-
-conda env create -f environment.yml
-conda activate HPNet
-
+If your hardware cannot support the specified environment configuration, you are encouraged to try combinations of different versions of Python, PyTorch, PyG (PyTorch Geometric), and PyTorch Lightning. In most cases, alternative version combinations should work adequately. For instance, I have successfully tested the project with PyTorch version `1.12.1`, and it worked as well.
  
 
