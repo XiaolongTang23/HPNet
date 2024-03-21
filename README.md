@@ -47,12 +47,20 @@ python test.py --root path/to/dataset_root --test_batch_size 2 --devices 1 --ckp
 
 ## Results
 We provide a [pre-trained model](https://drive.google.com/file/d/1PqOw3t3-Tf2v6nlqz2bqr0NjYIw_YJwK/view?usp=drive_link), and its result on Argoverse is:
-| Split | Brier-minFDE | minnFDE | MR | minADE |
+| Split | brier-minFDE | minnFDE | MR | minADE |
 |----------|----------|----------|----------|----------|
 | Val | 1.5060 | 0.8708 | 0.0685 | 0.6378 |
 | Test | 1.7375 | 1.0986 | 0.1067 | 0.7612 |
 
-
 ## Reference
+If you found this repo useful to your research, please consider citing our work:
+```bash
+@inproceedings{tang2024hpnet,
+  title={HPNet: Dynamic Trajectory Forecasting with Historical Prediction Attention},
+  author={Xiaolong Tang, Meina Kan, Shiguang Shan, Zhilong Ji, Jinfeng Bai, Xilin CHEN},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year={2024}
+}
+```
 
 
