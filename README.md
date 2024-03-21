@@ -7,7 +7,7 @@ This repository is the official implementation of HPNet: Dynamic Trajectory Fore
 + [Training](#training)
 + [Validation](#validation)
 + [Testing](#testing)
-+ [Checkpoint & Results](#checkpoint-results)
++ [Checkpoint & Results](#checkpoint--results)
 + [Reference](#reference)
 
 ## Getting Started
