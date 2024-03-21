@@ -11,13 +11,13 @@ This repository is the official implementation of HPNet: Dynamic Trajectory Fore
 + [Reference](#reference)
 
 ## Getting Started
-1.Clone this repository:
+1\. Clone this repository:
 ```
 git clone https://github.com/XiaolongTang23/HPNet.git
 cd HPNet
 ```
 
-2.Create a conda environment and install the dependencies:
+2\. Create a conda environment and install the dependencies:
 ```
 conda create -n HPNet python=3.8
 conda activate HPNet
@@ -27,7 +27,7 @@ conda install pytorch-lightning==2.0.3
 ```
 If necessary, you can try combinations of different versions of Python, PyTorch, PyG (PyTorch Geometric), and PyTorch Lightning. For instance, I have successfully tested the project with PyTorch version `1.12.1`, and it worked as well.
 
-3.Download [Argoverse Motion Forecasting Dataset v1.1](https://www.argoverse.org/av1.html#download-link). After downloading and extracting the tar.gz files, the dataset directory should be organized as follows:
+3\. Download [Argoverse Motion Forecasting Dataset v1.1](https://www.argoverse.org/av1.html#download-link). After downloading and extracting the tar.gz files, the dataset directory should be organized as follows:
 ```
 /path/to/dataset_root/
 ├── train/
@@ -42,7 +42,7 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
         ├── ...
 ```
 
-4.[Install Argoverse API](https://github.com/argoverse/argoverse-api).
+4\. [Install Argoverse API](https://github.com/argoverse/argoverse-api).
 
 ## Training
 For the initial training, data preprocessing may take several hours. Training on 8 RTX 4090 GPUs, one epoch takes about 30 minutes.
