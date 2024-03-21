@@ -16,7 +16,7 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('--root', type=str, required=True)
     parser.add_argument('--test_batch_size', type=int, required=True)
-    parser.add_argument('--num_workers', type=int, default=8)
+    parser.add_argument('--num_workers', type=int, default=4)
     parser.add_argument('--pin_memory', type=bool, default=True)
     parser.add_argument('--persistent_workers', type=bool, default=True)
     parser.add_argument('--devices', type=int, default=1)
