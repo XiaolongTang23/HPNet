@@ -31,6 +31,7 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
 3. Download [Argoverse Motion Forecasting Dataset v1.1](https://www.argoverse.org/av1.html#download-link), extract the Dataset Files, and [install Argoverse API](https://github.com/argoverse/argoverse-api).
 
 ## Training
+For the initial training, data preprocessing may take several hours. Training on 8 RTX 4090 GPUs, one epoch takes about 30 minutes.
 ```bash
 python train.py --root /path/to/dataset_root/ --train_batch_size 2 --val_batch_size 2 --devices 8
 ```
