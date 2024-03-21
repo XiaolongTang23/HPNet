@@ -26,8 +26,8 @@ conda install pytorch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 pytorch-cuda=
 pip install torch_geometric==2.3.1
 conda install pytorch-lightning==2.0.3
 ```
-If your hardware cannot support the specified environment configuration, you are encouraged to try combinations of different versions of Python, PyTorch, PyG (PyTorch Geometric), and PyTorch Lightning. For instance, I have successfully tested the project with PyTorch version `1.12.1`, and it worked as well.
+If necessary, you can try combinations of different versions of Python, PyTorch, PyG (PyTorch Geometric), and PyTorch Lightning. For instance, I have successfully tested the project with PyTorch version `1.12.1`, and it worked as well.
 
-3. 
+3. Download [Argoverse Motion Forecasting Dataset v1.1](https://www.argoverse.org/av1.html#download-link), extract the Dataset Files, and [install Argoverse API](https://github.com/argoverse/argoverse-api).
  
 
