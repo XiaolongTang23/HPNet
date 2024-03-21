@@ -12,13 +12,13 @@ This repository is the official implementation of HPNet: Dynamic Trajectory Fore
 
 ## Getting Started
 1.Clone this repository:
-```bash
+```
 git clone https://github.com/XiaolongTang23/HPNet.git
 cd HPNet
 ```
 
 2.Create a conda environment and install the dependencies:
-```bash
+```
 conda create -n HPNet python=3.8
 conda activate HPNet
 conda install pytorch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 pytorch-cuda=12.1 -c pytorch -c nvidia
@@ -46,17 +46,17 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
 
 ## Training
 For the initial training, data preprocessing may take several hours. Training on 8 RTX 4090 GPUs, one epoch takes about 30 minutes.
-```bash
+```
 python train.py --root /path/to/dataset_root/ --train_batch_size 2 --val_batch_size 2 --devices 8
 ```
 
 ## Validation
-```bash
+```
 python val.py --root /path/to/dataset_root/ --val_batch_size 2 --devices 8 --ckpt_path /path/to/checkpoint.ckpt 
 ```
 
 ## Testing
-```bash
+```
 python test.py --root /path/to/dataset_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt 
 ```
 
@@ -69,7 +69,7 @@ We provide a [pre-trained model](https://drive.google.com/file/d/1PqOw3t3-Tf2v6n
 
 ## Reference
 If you found this repo useful to your research, please consider citing our work:
-```bash
+```
 @inproceedings{tang2024hpnet,
   title={HPNet: Dynamic Trajectory Forecasting with Historical Prediction Attention},
   author={Xiaolong Tang, Meina Kan, Shiguang Shan, Zhilong Ji, Jinfeng Bai, Xilin CHEN},
