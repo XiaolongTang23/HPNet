@@ -42,7 +42,7 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
         ├── ...
 ```
 
-4\. [Install Argoverse API](https://github.com/argoverse/argoverse-api).
+4\. Install [Argoverse API](https://github.com/argoverse/argoverse-api).
 
 ## Training
 For the initial training, data preprocessing may take several hours. Training on 8 RTX 4090 GPUs, one epoch takes about 30 minutes.
