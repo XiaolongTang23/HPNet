@@ -3,12 +3,12 @@ This repository is the official implementation of HPNet: Dynamic Trajectory Fore
 ![AnoverviewofHPNet](assets/HPNet.png)
 
 ## Table of Contents
-+ [Getting Started](## Getting Started)
-+ [Training](## Training)
-+ Validation
-+ Testing
-+ Results
-+ Reference
++ [Getting Started](#getting-started)
++ [Training](#training)
++ [Validation](#validation)
++ [Testing](#testing)
++ [Results](#results)
++ [Reference](#reference)
 
 ## Getting Started
 1. Clone this repository:
