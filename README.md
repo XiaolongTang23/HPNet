@@ -7,7 +7,7 @@ This repository is the official implementation of HPNet: Dynamic Trajectory Fore
 + [Training](#training)
 + [Validation](#validation)
 + [Testing](#testing)
-+ [Results](#results)
++ [Checkpoint & Results](#checkpoint-results)
 + [Reference](#reference)
 
 ## Getting Started
@@ -45,7 +45,7 @@ python val.py --root path/to/dataset_root --val_batch_size 2 --devices 8 --ckpt_
 python test.py --root path/to/dataset_root --test_batch_size 2 --devices 1 --ckpt_path path/to/checkpoint.ckpt 
 ```
 
-## Results
+## Checkpoint & Results
 We provide a [pre-trained model](https://drive.google.com/file/d/1PqOw3t3-Tf2v6nlqz2bqr0NjYIw_YJwK/view?usp=drive_link), and its result on Argoverse is:
 | Split | brier-minFDE | minnFDE | MR | minADE |
 |----------|----------|----------|----------|----------|
