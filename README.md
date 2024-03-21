@@ -9,6 +9,7 @@ This repository is the official implementation of HPNet: Dynamic Trajectory Fore
 + [Testing](#testing)
 + [Checkpoint & Results](#checkpoint--results)
 + [Reference](#reference)
++ [Acknowledgement](#acknowledgement)
 
 ## Getting Started
 1\. Clone this repository:
@@ -86,3 +87,7 @@ This repository is developed based on [Query-Centric Trajectory Prediction](http
   year={2023}
 }
 ```
+
+## Acknowledgement
++ [QCNet](https://github.com/ZikangZhou/QCNet)
++ [HiVT](https://github.com/ZikangZhou/HiVT)
