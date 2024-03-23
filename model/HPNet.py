@@ -250,7 +250,7 @@ class HPNet(pl.LightningModule):
 
     @staticmethod
     def add_model_specific_args(parent_parser):
-        parser = parent_parser.add_argument_group('DQNet')
+        parser = parent_parser.add_argument_group('HPNet')
         parser.add_argument('--hidden_dim', type=int, default=128)
         parser.add_argument('--num_historical_steps', type=int, default=20)
         parser.add_argument('--num_future_steps', type=int, default=30)
