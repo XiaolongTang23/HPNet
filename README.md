@@ -112,11 +112,33 @@ python test.py --root /path/to/INTERACTION_root/ --test_batch_size 2 --devices 1
 ```
 
 ## Checkpoint & Results
-We provide a [pre-trained model](https://drive.google.com/file/d/1PqOw3t3-Tf2v6nlqz2bqr0NjYIw_YJwK/view?usp=drive_link) on Argoverse, and its results are:
-| Split | brier-minFDE | minnFDE | MR | minADE |
+<details>
+<summary><b>Argoverse</b></summary>
+<p>
+
+We provide a [pre-trained model on Argoverse](https://drive.google.com/file/d/1PqOw3t3-Tf2v6nlqz2bqr0NjYIw_YJwK/view?usp=drive_link), and its results are:
+| Split | brier-minFDE | minFDE | MR | minADE |
 |----------|:----------:|:----------:|:----------:|:----------:|
 | Val | 1.5060 | 0.8708 | 0.0685 | 0.6378 |
 | Test | 1.7375 | 1.0986 | 0.1067 | 0.7612 |
+
+</p>
+</details>
+
+<!--
+<details>
+<summary><b>INTERACTION</b></summary>
+<p>
+
+Also, we provide a [pre-trained model on INTERACTION](https://drive.google.com/file/d/1PqOw3t3-Tf2v6nlqz2bqr0NjYIw_YJwK/view?usp=drive_link), and its results are:
+| Split | minJointFDE | minJointADE |
+|----------|:----------:|:----------:|
+| Val | 1.5060 | 0.8708 |
+| Test | 1.7375 | 1.0986 |
+
+</p>
+</details>
+-->
 
 ## Reference
 If you found this repo useful to your research, please consider citing our work:
