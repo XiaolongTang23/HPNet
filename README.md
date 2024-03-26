@@ -104,10 +104,10 @@ python val.py --root /path/to/INTERACTION_root/ --val_batch_size 2 --devices 8 -
 
 ## Testing
 ```
-For Argoverse
+# For Argoverse
 python test.py --root /path/to/Argoverse_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt
 
-For INTERACTION
+# For INTERACTION
 python test.py --root /path/to/INTERACTION_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt
 ```
 
