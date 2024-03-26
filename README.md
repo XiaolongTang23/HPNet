@@ -84,7 +84,7 @@ pip install lanelet2==1.2.1
 
 
 ## Training
-Data preprocessing may take several hours the first time you run this project. Training on 8 RTX 4090 GPUs, one epoch takes about 30 and 6 minutes for Argoverse and INTERACTION datasets, respectively.
+Data preprocessing may take several hours the first time you run this project. Training on 8 RTX 4090 GPUs, one epoch takes about 30 and 6 minutes for Argoverse and INTERACTION, respectively.
 ```
 # For Argoverse
 python HPNet_Argoverse/train.py --root /path/to/Argoverse_root/ --train_batch_size 2 --val_batch_size 2 --devices 8
