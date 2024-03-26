@@ -35,19 +35,19 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
 
 1). Download the [Argoverse Motion Forecasting Dataset v1.1](https://www.argoverse.org/av1.html#download-link). After downloading and extracting the tar.gz files, organize the dataset directory as follows:
 
-    ```
-    /path/to/dataset_root/
-    ├── train/
-    │   └── data/
-    │       ├── 1.csv
-    │       ├── 2.csv
-    │       ├── ...
-    └── val/
-        └── data/
-            ├── 1.csv
-            ├── 2.csv
-            ├── ...
-    ```
+```
+/path/to/dataset_root/
+├── train/
+│   └── data/
+│       ├── 1.csv
+│       ├── 2.csv
+│       ├── ...
+└── val/
+    └── data/
+        ├── 1.csv
+        ├── 2.csv
+        ├── ...
+```
 
 2). Install the [Argoverse API](https://github.com/argoverse/argoverse-api).
 
@@ -60,24 +60,24 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
 
 1). Download the [INTERACTION Dataset v1.2](https://interaction-dataset.com/). Here, we only need the data for the multi-agent tracks. After downloading and extracting the zip files, organize the dataset directory as follows:
 
-    ```
-    /path/to/dataset_root/
-    ├── maps/
-    ├── test_conditional-multi-agent/
-    ├── test_multi-agent/
-    ├── train/
-    │   └── DR_CHN_Merging_ZS0_train
-    │   ├── ...
-    └── val/
-        └── DR_CHN_Merging_ZS0_val
-        ├── ...
-    
-    ```
+```
+/path/to/dataset_root/
+├── maps/
+├── test_conditional-multi-agent/
+├── test_multi-agent/
+├── train/
+│   └── DR_CHN_Merging_ZS0_train
+│   ├── ...
+└── val/
+    └── DR_CHN_Merging_ZS0_val
+    ├── ...
+
+```
 
 2). Install the map dependency [lanelet2](https://github.com/fzi-forschungszentrum-informatik/Lanelet2):
-    ```
-    pip install lanelet2==1.2.1
-    ```
+```
+pip install lanelet2==1.2.1
+```
 
 </p>
 </details>
