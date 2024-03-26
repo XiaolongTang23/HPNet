@@ -33,7 +33,7 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
 <summary><b>Argoverse</b></summary>
 <p>
 
-1. Download the [Argoverse Motion Forecasting Dataset v1.1](https://www.argoverse.org/av1.html#download-link). After downloading and extracting the tar.gz files, organize the dataset directory as follows:
+1). Download the [Argoverse Motion Forecasting Dataset v1.1](https://www.argoverse.org/av1.html#download-link). After downloading and extracting the tar.gz files, organize the dataset directory as follows:
 
     ```
     /path/to/dataset_root/
@@ -49,7 +49,7 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
             ├── ...
     ```
 
-2. Install the [Argoverse API](https://github.com/argoverse/argoverse-api).
+2). Install the [Argoverse API](https://github.com/argoverse/argoverse-api).
 
 </p>
 </details>
@@ -58,7 +58,7 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
 <summary><b>INTERACTION</b></summary>
 <p>
 
-1. Download the [INTERACTION Dataset v1.2](https://interaction-dataset.com/). Here, we only need the data for the multi-agent tracks. After downloading and extracting the zip files, organize the dataset directory as follows:
+1). Download the [INTERACTION Dataset v1.2](https://interaction-dataset.com/). Here, we only need the data for the multi-agent tracks. After downloading and extracting the zip files, organize the dataset directory as follows:
 
     ```
     /path/to/dataset_root/
@@ -68,13 +68,13 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
     ├── train/
     │   └── DR_CHN_Merging_ZS0_train
     │   ├── ...
-    ├── val/
+    └── val/
         └── DR_CHN_Merging_ZS0_val
         ├── ...
     
     ```
 
-2. Install the map dependency library [lanelet2](https://github.com/fzi-forschungszentrum-informatik/Lanelet2):
+2). Install the map dependency [lanelet2](https://github.com/fzi-forschungszentrum-informatik/Lanelet2):
     ```
     pip install lanelet2==1.2.1
     ```
