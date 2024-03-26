@@ -54,7 +54,33 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
 </p>
 </details>
 
+<details>
+<summary><b>INTERACTION</b></summary>
+<p>
 
+1. Download the [INTERACTION Dataset v1.2](https://interaction-dataset.com/). Here, we only need the data for the multi-agent tracks. After downloading and extracting the zip files, organize the dataset directory as follows:
+
+    ```
+    /path/to/dataset_root/
+    ├── maps/
+    ├── test_conditional-multi-agent/
+    ├── test_multi-agent/
+    ├── train/
+    │   └── DR_CHN_Merging_ZS0_train
+    │   ├── ...
+    ├── val/
+        └── DR_CHN_Merging_ZS0_val
+        ├── ...
+    
+    ```
+
+2. Install the map dependency library [lanelet2](https://github.com/fzi-forschungszentrum-informatik/Lanelet2):
+    ```
+    pip install lanelet2==1.2.1
+    ```
+
+</p>
+</details>
 
 
 ## Training
