@@ -30,25 +30,30 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
 
 3\. Download datasets and install the dependencies:
 <details>
-    <summary>Argoverse</summary>
-  
-    1)\. Download [Argoverse Motion Forecasting Dataset v1.1](https://www.argoverse.org/av1.html#download-link). After downloading and extracting the tar.gz files, the dataset directory should be organized as follows:
+<summary><b>Argoverse</b></summary>
+<p>
+
+1. Download the [Argoverse Motion Forecasting Dataset v1.1](https://www.argoverse.org/av1.html#download-link). After downloading and extracting the tar.gz files, organize the dataset directory as follows:
+
     ```
     /path/to/dataset_root/
     ├── train/
-    |   └── data/
-    |       ├── 1.csv
-    |       ├── 2.csv
-    |       ├── ...
+    │   └── data/
+    │       ├── 1.csv
+    │       ├── 2.csv
+    │       ├── ...
     └── val/
         └── data/
             ├── 1.csv
             ├── 2.csv
             ├── ...
     ```
-    2)\. Install [Argoverse API](https://github.com/argoverse/argoverse-api).
-  
+
+2. Install the [Argoverse API](https://github.com/argoverse/argoverse-api).
+
+</p>
 </details>
+
 
 
 
