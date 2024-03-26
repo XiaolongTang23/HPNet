@@ -36,7 +36,7 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
 1). Download the [Argoverse Motion Forecasting Dataset v1.1](https://www.argoverse.org/av1.html#download-link). After downloading and extracting the tar.gz files, organize the dataset directory as follows:
 
 ```
-/path/to/dataset_root/
+/path/to/Argoverse_root/
 ├── train/
 │   └── data/
 │       ├── 1.csv
@@ -61,7 +61,7 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
 1). Download the [INTERACTION Dataset v1.2](https://interaction-dataset.com/). Here, we only need the data for the multi-agent tracks. After downloading and extracting the zip files, organize the dataset directory as follows:
 
 ```
-/path/to/dataset_root/
+/path/to/INTERACTION_root/
 ├── maps/
 ├── test_conditional-multi-agent/
 ├── test_multi-agent/
@@ -84,19 +84,31 @@ pip install lanelet2==1.2.1
 
 
 ## Training
-For the initial training, data preprocessing may take several hours. Training on 8 RTX 4090 GPUs, one epoch takes about 30 minutes.
+Data preprocessing may take several hours the first time you run this project. Training on 8 RTX 4090 GPUs, one epoch takes about 30 and 6 minutes for Argoverse and INTERACTION datasets, respectively.
 ```
-python train.py --root /path/to/dataset_root/ --train_batch_size 2 --val_batch_size 2 --devices 8
+# For Argoverse
+python HPNet_Argoverse/train.py --root /path/to/Argoverse_root/ --train_batch_size 2 --val_batch_size 2 --devices 8
+
+# For INTERACTION
+python HPNet_INTERACTION/train.py --root /path/to/INTERACTION_root/ --train_batch_size 2 --val_batch_size 2 --devices 8
 ```
 
 ## Validation
 ```
-python val.py --root /path/to/dataset_root/ --val_batch_size 2 --devices 8 --ckpt_path /path/to/checkpoint.ckpt 
+# For Argoverse
+python val.py --root /path/to/Argoverse_root/ --val_batch_size 2 --devices 8 --ckpt_path /path/to/checkpoint.ckpt
+
+# For INTERACTION
+python val.py --root /path/to/INTERACTION_root/ --val_batch_size 2 --devices 8 --ckpt_path /path/to/checkpoint.ckpt
 ```
 
 ## Testing
 ```
-python test.py --root /path/to/dataset_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt 
+For Argoverse
+python test.py --root /path/to/Argoverse_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt
+
+For INTERACTION
+python test.py --root /path/to/INTERACTION_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt
 ```
 
 ## Checkpoint & Results
@@ -118,4 +130,4 @@ If you found this repo useful to your research, please consider citing our work:
 ```
 
 ## Acknowledgement
-We sincerely appreciate [Argoverse](https://github.com/argoverse/argoverse-api), [QCNet](https://github.com/ZikangZhou/QCNet) and [HiVT](https://github.com/ZikangZhou/HiVT) for their awesome codebases.
+We sincerely appreciate [Argoverse](https://github.com/argoverse/argoverse-api), [INTERACTION](https://github.com/interaction-dataset/interaction-dataset),[QCNet](https://github.com/ZikangZhou/QCNet) and [HiVT](https://github.com/ZikangZhou/HiVT) for their awesome codebases.
