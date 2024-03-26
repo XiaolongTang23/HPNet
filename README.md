@@ -80,4 +80,4 @@ If you found this repo useful to your research, please consider citing our work:
 ```
 
 ## Acknowledgement
-We sincerely appreciate [QCNet](https://github.com/ZikangZhou/QCNet) and [HiVT](https://github.com/ZikangZhou/HiVT) for their awesome codebases.
+We sincerely appreciate [Argoverse](https://github.com/argoverse/argoverse-api), [QCNet](https://github.com/ZikangZhou/QCNet) and [HiVT](https://github.com/ZikangZhou/HiVT) for their awesome codebases.
