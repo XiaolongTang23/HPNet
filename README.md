@@ -9,8 +9,8 @@ This repository is the official implementation of [HPNet: Dynamic Trajectory For
 + [Validation](#validation)
 + [Testing](#testing)
 + [Pre-trained Models & Results](#pre-trained-models--results)
-+ [Citing HPNet](#citing-hpnet)
 + [Acknowledgement](#acknowledgement)
++ [Citation](#citation)
 
 ## Setup
 Clone the repository and set up the environment:
@@ -129,7 +129,12 @@ python HPNet-INTERACTION/test.py --root /path/to/INTERACTION_root/ --test_batch_
 | Val   | 0.5577      | 0.1739      |
 | Test  | 0.8231      | 0.2548      |
 
-## Citing HPNet
+
+## Acknowledgement
+We sincerely appreciate [Argoverse](https://github.com/argoverse/argoverse-api), [INTERACTION](https://github.com/interaction-dataset/interaction-dataset),[QCNet](https://github.com/ZikangZhou/QCNet) and [HiVT](https://github.com/ZikangZhou/HiVT) for their awesome codebases.
+
+
+## Citation
 
 If HPNet has been helpful in your research, please consider citing our work:
 
@@ -141,6 +146,3 @@ If HPNet has been helpful in your research, please consider citing our work:
   year={2024}
 }
 ```
-
-## Acknowledgement
-We sincerely appreciate [Argoverse](https://github.com/argoverse/argoverse-api), [INTERACTION](https://github.com/interaction-dataset/interaction-dataset),[QCNet](https://github.com/ZikangZhou/QCNet) and [HiVT](https://github.com/ZikangZhou/HiVT) for their awesome codebases.
