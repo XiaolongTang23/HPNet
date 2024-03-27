@@ -90,7 +90,7 @@ Data preprocessing may take several hours the first time you run this project. T
 python HPNet-Argoverse/train.py --root /path/to/Argoverse_root/ --train_batch_size 2 --val_batch_size 2 --devices 8
 
 # For INTERACTION
-python HPNe-INTERACTION/train.py --root /path/to/INTERACTION_root/ --train_batch_size 2 --val_batch_size 2 --devices 8
+python HPNet-INTERACTION/train.py --root /path/to/INTERACTION_root/ --train_batch_size 2 --val_batch_size 2 --devices 8
 ```
 
 ## Validation
@@ -99,7 +99,7 @@ python HPNe-INTERACTION/train.py --root /path/to/INTERACTION_root/ --train_batch
 python HPNet-Argoverse/val.py --root /path/to/Argoverse_root/ --val_batch_size 2 --devices 8 --ckpt_path /path/to/checkpoint.ckpt
 
 # For INTERACTION
-python HPNe-INTERACTION/val.py --root /path/to/INTERACTION_root/ --val_batch_size 2 --devices 8 --ckpt_path /path/to/checkpoint.ckpt
+python HPNet-INTERACTION/val.py --root /path/to/INTERACTION_root/ --val_batch_size 2 --devices 8 --ckpt_path /path/to/checkpoint.ckpt
 ```
 
 ## Testing
@@ -108,7 +108,7 @@ python HPNe-INTERACTION/val.py --root /path/to/INTERACTION_root/ --val_batch_siz
 python HPNet-Argoverse/test.py --root /path/to/Argoverse_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt
 
 # For INTERACTION
-python HPNe-INTERACTION/test.py --root /path/to/INTERACTION_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt
+python HPNet-INTERACTION/test.py --root /path/to/INTERACTION_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt
 ```
 
 ## Checkpoint & Results
