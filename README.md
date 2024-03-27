@@ -7,8 +7,8 @@ This repository is the official implementation of [HPNet: Dynamic Trajectory For
 + [Training](#training)
 + [Validation](#validation)
 + [Testing](#testing)
-+ [Checkpoint & Results](#checkpoint--results)
-+ [Reference](#reference)
+- [Pre-trained Models & Results](#pre-trained-models--results)
+- [Citing HPNet](#citing-hpnet)
 + [Acknowledgement](#acknowledgement)
 
 ## Getting Started
@@ -111,36 +111,6 @@ python HPNet-Argoverse/test.py --root /path/to/Argoverse_root/ --test_batch_size
 python HPNet-INTERACTION/test.py --root /path/to/INTERACTION_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt
 ```
 
-<!--
-## Checkpoint & Results
-<details>
-<summary><b>Argoverse</b></summary>
-<p>
-
-We provide a [pre-trained model on Argoverse](https://drive.google.com/file/d/1PqOw3t3-Tf2v6nlqz2bqr0NjYIw_YJwK/view?usp=drive_link), and its results are:
-| Split | brier-minFDE | minFDE | MR | minADE |
-|----------|:----------:|:----------:|:----------:|:----------:|
-| Val | 1.5060 | 0.8708 | 0.0685 | 0.6378 |
-| Test | 1.7375 | 1.0986 | 0.1067 | 0.7612 |
-
-</p>
-</details>
-
-<details>
-<summary><b>INTERACTION</b></summary>
-<p>
-
-Also, we provide a [pre-trained model on INTERACTION](https://drive.google.com/file/d/1wj6Wg2-eta4pVFxHARsaVCyisk2Fr-qM/view?usp=sharing), and its results are:
-| Split | minJointFDE | minJointADE |
-|----------|:----------:|:----------:|
-| Val | 0.5577 | 0.1739 |
-| Test | 0.8231 | 0.2548 |	
-
-</p>
-</details>
-
--->
-
 ## Pre-trained Models & Results
 
 ### Argoverse
@@ -172,19 +142,7 @@ If HPNet has been helpful in your research, please consider citing our work:
   booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
   year={2024}
 }
-
-<!--
-## Reference
-If you found this repo useful to your research, please consider citing our work:
 ```
-@inproceedings{tang2024hpnet,
-  title={HPNet: Dynamic Trajectory Forecasting with Historical Prediction Attention},
-  author={Xiaolong Tang, Meina Kan, Shiguang Shan, Zhilong Ji, Jinfeng Bai, Xilin CHEN},
-  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-  year={2024}
-}
-```
--->
 
 ## Acknowledgement
 We sincerely appreciate [Argoverse](https://github.com/argoverse/argoverse-api), [INTERACTION](https://github.com/interaction-dataset/interaction-dataset),[QCNet](https://github.com/ZikangZhou/QCNet) and [HiVT](https://github.com/ZikangZhou/HiVT) for their awesome codebases.
