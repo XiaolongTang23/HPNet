@@ -3,7 +3,7 @@ This repository is the official implementation of [HPNet: Dynamic Trajectory For
 ![AnoverviewofHPNet](assets/HPNet.png)
 
 ## Table of Contents
-+ [Setup and Installation](#setup-and-installation)
++ [Setup](#setup)
 + [Datasets](#datasets)
 + [Training](#training)
 + [Validation](#validation)
@@ -12,7 +12,7 @@ This repository is the official implementation of [HPNet: Dynamic Trajectory For
 + [Citing HPNet](#citing-hpnet)
 + [Acknowledgement](#acknowledgement)
 
-## Setup and Installation
+## Setup
 Clone the repository and set up the environment:
 ```
 git clone https://github.com/XiaolongTang23/HPNet.git
