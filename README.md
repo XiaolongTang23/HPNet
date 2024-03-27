@@ -87,28 +87,28 @@ pip install lanelet2==1.2.1
 Data preprocessing may take several hours the first time you run this project. Training on 8 RTX 4090 GPUs, one epoch takes about 30 and 6 minutes for Argoverse and INTERACTION, respectively.
 ```
 # For Argoverse
-python HPNet_Argoverse/train.py --root /path/to/Argoverse_root/ --train_batch_size 2 --val_batch_size 2 --devices 8
+python HPNet-Argoverse/train.py --root /path/to/Argoverse_root/ --train_batch_size 2 --val_batch_size 2 --devices 8
 
 # For INTERACTION
-python HPNet_INTERACTION/train.py --root /path/to/INTERACTION_root/ --train_batch_size 2 --val_batch_size 2 --devices 8
+python HPNe-INTERACTION/train.py --root /path/to/INTERACTION_root/ --train_batch_size 2 --val_batch_size 2 --devices 8
 ```
 
 ## Validation
 ```
 # For Argoverse
-python val.py --root /path/to/Argoverse_root/ --val_batch_size 2 --devices 8 --ckpt_path /path/to/checkpoint.ckpt
+python HPNet-Argoverse/val.py --root /path/to/Argoverse_root/ --val_batch_size 2 --devices 8 --ckpt_path /path/to/checkpoint.ckpt
 
 # For INTERACTION
-python val.py --root /path/to/INTERACTION_root/ --val_batch_size 2 --devices 8 --ckpt_path /path/to/checkpoint.ckpt
+python HPNe-INTERACTION/val.py --root /path/to/INTERACTION_root/ --val_batch_size 2 --devices 8 --ckpt_path /path/to/checkpoint.ckpt
 ```
 
 ## Testing
 ```
 # For Argoverse
-python test.py --root /path/to/Argoverse_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt
+python HPNet-Argoverse/test.py --root /path/to/Argoverse_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt
 
 # For INTERACTION
-python test.py --root /path/to/INTERACTION_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt
+python HPNe-INTERACTION/test.py --root /path/to/INTERACTION_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt
 ```
 
 ## Checkpoint & Results
