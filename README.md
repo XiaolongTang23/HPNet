@@ -3,23 +3,19 @@ This repository is the official implementation of [HPNet: Dynamic Trajectory For
 ![AnoverviewofHPNet](assets/HPNet.png)
 
 ## Table of Contents
-+ [Getting Started](#getting-started)
-+ [Training](#training)
++ [Setup and Installation](#setup-and-installation)
++ [Datasets](#datasets)
 + [Validation](#validation)
 + [Testing](#testing)
-- [Pre-trained Models & Results](#pre-trained-models--results)
-- [Citing HPNet](#citing-hpnet)
++ [Pre-trained Models & Results](#pre-trained-models--results)
++ [Citing HPNet](#citing-hpnet)
 + [Acknowledgement](#acknowledgement)
 
-## Getting Started
-1\. Clone this repository:
+## Setup and Installation
+Clone the repository and set up the environment:
 ```
 git clone https://github.com/XiaolongTang23/HPNet.git
 cd HPNet
-```
-
-2\. Create a conda environment and install the dependencies:
-```
 conda create -n HPNet python=3.8
 conda activate HPNet
 conda install pytorch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 pytorch-cuda=12.1 -c pytorch -c nvidia
@@ -28,12 +24,13 @@ conda install pytorch-lightning==2.0.3
 ```
 If necessary, you can try combinations of different versions of Python, PyTorch, PyG (PyTorch Geometric), and PyTorch Lightning. For instance, I have successfully tested the project with PyTorch version `1.12.1`, and it worked as well.
 
-3\. Download datasets and install the dependencies:
+## Datasets
+
 <details>
 <summary><b>Argoverse</b></summary>
 <p>
 
-1). Download the [Argoverse Motion Forecasting Dataset v1.1](https://www.argoverse.org/av1.html#download-link). After downloading and extracting the tar.gz files, organize the dataset directory as follows:
+1. Download the [Argoverse Motion Forecasting Dataset v1.1](https://www.argoverse.org/av1.html#download-link). After downloading and extracting the tar.gz files, organize the dataset directory as follows:
 
 ```
 /path/to/Argoverse_root/
@@ -49,7 +46,7 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
         ├── ...
 ```
 
-2). Install the [Argoverse API](https://github.com/argoverse/argoverse-api).
+2. Install the [Argoverse API](https://github.com/argoverse/argoverse-api).
 
 </p>
 </details>
@@ -58,7 +55,7 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
 <summary><b>INTERACTION</b></summary>
 <p>
 
-1). Download the [INTERACTION Dataset v1.2](https://interaction-dataset.com/). Here, we only need the data for the multi-agent tracks. After downloading and extracting the zip files, organize the dataset directory as follows:
+1. Download the [INTERACTION Dataset v1.2](https://interaction-dataset.com/). Here, we only need the data for the multi-agent tracks. After downloading and extracting the zip files, organize the dataset directory as follows:
 
 ```
 /path/to/INTERACTION_root/
@@ -74,7 +71,7 @@ If necessary, you can try combinations of different versions of Python, PyTorch,
 
 ```
 
-2). Install the map dependency [lanelet2](https://github.com/fzi-forschungszentrum-informatik/Lanelet2):
+2. Install the map dependency [lanelet2](https://github.com/fzi-forschungszentrum-informatik/Lanelet2):
 ```
 pip install lanelet2==1.2.1
 ```
@@ -118,7 +115,7 @@ python HPNet-INTERACTION/test.py --root /path/to/INTERACTION_root/ --test_batch_
 - **Performance Metrics:**
 
 | Split | brier-minFDE | minFDE | MR | minADE |
-|-------|--------------|--------|----|--------|
+|-------|:------------:|:------:|:--:|:------:|
 | Val   | 1.5060       | 0.8708 | 0.0685 | 0.6378 |
 | Test  | 1.7375       | 1.0986 | 0.1067 | 0.7612 |
 
@@ -127,7 +124,7 @@ python HPNet-INTERACTION/test.py --root /path/to/INTERACTION_root/ --test_batch_
 - **Performance Metrics:**
 
 | Split | minJointFDE | minJointADE |
-|-------|-------------|-------------|
+|-------|:-----------:|:-----------:|
 | Val   | 0.5577      | 0.1739      |
 | Test  | 0.8231      | 0.2548      |
 
