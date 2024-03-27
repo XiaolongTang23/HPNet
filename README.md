@@ -125,20 +125,18 @@ We provide a [pre-trained model on Argoverse](https://drive.google.com/file/d/1P
 </p>
 </details>
 
-<!--
 <details>
 <summary><b>INTERACTION</b></summary>
 <p>
 
-Also, we provide a [pre-trained model on INTERACTION](https://drive.google.com/file/d/1PqOw3t3-Tf2v6nlqz2bqr0NjYIw_YJwK/view?usp=drive_link), and its results are:
+Also, we provide a [pre-trained model on INTERACTION](https://drive.google.com/file/d/1wj6Wg2-eta4pVFxHARsaVCyisk2Fr-qM/view?usp=sharing), and its results are:
 | Split | minJointFDE | minJointADE |
 |----------|:----------:|:----------:|
-| Val | 1.5060 | 0.8708 |
-| Test | 1.7375 | 1.0986 |
+| Val | 0.5577 | 0.1739 |
+| Test | 0.8231 | 0.2548 |	
 
 </p>
 </details>
--->
 
 ## Reference
 If you found this repo useful to your research, please consider citing our work:
