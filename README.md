@@ -64,10 +64,10 @@ conda install pytorch-lightning==2.0.3
 ├── test_conditional-multi-agent/
 ├── test_multi-agent/
 ├── train/
-│   └── DR_CHN_Merging_ZS0_train
+│   ├── DR_CHN_Merging_ZS0_train
 │   ├── ...
 └── val/
-    └── DR_CHN_Merging_ZS0_val
+    ├── DR_CHN_Merging_ZS0_val
     ├── ...
 
 ```
