@@ -5,6 +5,7 @@ This repository is the official implementation of [HPNet: Dynamic Trajectory For
 ## Table of Contents
 + [Setup and Installation](#setup-and-installation)
 + [Datasets](#datasets)
++ [Training](#training)
 + [Validation](#validation)
 + [Testing](#testing)
 + [Pre-trained Models & Results](#pre-trained-models--results)
