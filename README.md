@@ -23,7 +23,7 @@ conda install pytorch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 pytorch-cuda=
 pip install torch_geometric==2.3.1
 conda install pytorch-lightning==2.0.3
 ```
-If necessary, you can try combinations of different versions of Python, PyTorch, PyG (PyTorch Geometric), and PyTorch Lightning. For instance, I have successfully tested the project with PyTorch version `1.12.1`, and it worked as well.
+*Note:* For compatibility, you may experiment with different versions, e.g., PyTorch 1.12.1 has been confirmed to work.
 
 ## Datasets
 
