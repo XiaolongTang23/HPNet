@@ -111,6 +111,7 @@ python HPNet-Argoverse/test.py --root /path/to/Argoverse_root/ --test_batch_size
 python HPNet-INTERACTION/test.py --root /path/to/INTERACTION_root/ --test_batch_size 2 --devices 1 --ckpt_path /path/to/checkpoint.ckpt
 ```
 
+<!--
 ## Checkpoint & Results
 <details>
 <summary><b>Argoverse</b></summary>
@@ -138,6 +139,41 @@ Also, we provide a [pre-trained model on INTERACTION](https://drive.google.com/f
 </p>
 </details>
 
+-->
+
+## Pre-trained Models & Results
+
+### Argoverse
+- **Pre-trained model:** [Download here](https://drive.google.com/file/d/1PqOw3t3-Tf2v6nlqz2bqr0NjYIw_YJwK/view?usp=drive_link)
+- **Performance Metrics:**
+
+| Split | brier-minFDE | minFDE | MR | minADE |
+|-------|--------------|--------|----|--------|
+| Val   | 1.5060       | 0.8708 | 0.0685 | 0.6378 |
+| Test  | 1.7375       | 1.0986 | 0.1067 | 0.7612 |
+
+### INTERACTION
+- **Pre-trained model:** [Download here](https://drive.google.com/file/d/1wj6Wg2-eta4pVFxHARsaVCyisk2Fr-qM/view?usp=sharing)
+- **Performance Metrics:**
+
+| Split | minJointFDE | minJointADE |
+|-------|-------------|-------------|
+| Val   | 0.5577      | 0.1739      |
+| Test  | 0.8231      | 0.2548      |
+
+## Citing HPNet
+
+If HPNet has been helpful in your research, please consider citing our work:
+
+```bibtex
+@inproceedings{tang2024hpnet,
+  title={HPNet: Dynamic Trajectory Forecasting with Historical Prediction Attention},
+  author={Xiaolong Tang, Meina Kan, Shiguang Shan, Zhilong Ji, Jinfeng Bai, Xilin Chen},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year={2024}
+}
+
+<!--
 ## Reference
 If you found this repo useful to your research, please consider citing our work:
 ```
@@ -148,6 +184,7 @@ If you found this repo useful to your research, please consider citing our work:
   year={2024}
 }
 ```
+-->
 
 ## Acknowledgement
 We sincerely appreciate [Argoverse](https://github.com/argoverse/argoverse-api), [INTERACTION](https://github.com/interaction-dataset/interaction-dataset),[QCNet](https://github.com/ZikangZhou/QCNet) and [HiVT](https://github.com/ZikangZhou/HiVT) for their awesome codebases.
