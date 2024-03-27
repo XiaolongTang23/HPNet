@@ -8,7 +8,6 @@ import math
 import pandas as pd
 
 from losses import HuberTrajLoss
-from losses import HuberYawLoss
 from metrics import minJointADE
 from metrics import minJointFDE
 from modules import Backbone
