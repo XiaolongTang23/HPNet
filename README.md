@@ -1,6 +1,7 @@
 # HPNet: Dynamic Trajectory Forecasting with Historical Prediction Attention
 This repository is the official implementation of HPNet: Dynamic Trajectory Forecasting with Historical Prediction Attention published in CVPR 2024.
-[arXiv](https://arxiv.org/pdf/2404.06351.pdf)
+
+[[arXiv](https://arxiv.org/pdf/2404.06351.pdf)]
 ![AnoverviewofHPNet](assets/HPNet.png)
 
 ## Table of Contents
