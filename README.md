@@ -139,21 +139,11 @@ We sincerely appreciate [Argoverse](https://github.com/argoverse/argoverse-api),
 
 If HPNet has been helpful in your research, please consider citing our work:
 
-```bibtex
-@article{tang2024hpnet,
-  title={HPNet: Dynamic Trajectory Forecasting with Historical Prediction Attention},
+```@inproceedings{tang2024hpnet,
+  title={Hpnet: Dynamic trajectory forecasting with historical prediction attention},
   author={Tang, Xiaolong and Kan, Meina and Shan, Shiguang and Ji, Zhilong and Bai, Jinfeng and Chen, Xilin},
-  journal={arXiv preprint arXiv:2404.06351},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={15261--15270},
   year={2024}
 }
 ```
-
-<!--
-```bibtex
-@inproceedings{tang2024hpnet,
-  title={HPNet: Dynamic Trajectory Forecasting with Historical Prediction Attention},
-  author={Xiaolong Tang, Meina Kan, Shiguang Shan, Zhilong Ji, Jinfeng Bai, Xilin Chen},
-  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-  year={2024}
-}
-```-->
