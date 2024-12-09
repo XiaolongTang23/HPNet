@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from argoverse.map_representation.map_api import ArgoverseMap
 import numpy as np
 import torch
+import os
 from torch_geometric.data import Batch
 from torch_geometric.utils import unbatch
 
@@ -120,7 +121,9 @@ def trajectory_visualization(data:Batch, traj_output: torch.tensor, is_test: tor
         
         plt.axis("off")
         if is_test:
+            os.makedirs('test_output/visualization', exist_ok=True)
             plt.savefig(f'test_output/visualization/{data["scenario_id"][i]}.png')
         else:
+            os.makedirs('visualization/trajectory', exist_ok=True)
             plt.savefig(f'visualization/trajectory/{data["scenario_id"][i]}.png')
         plt.close()
