@@ -15,6 +15,7 @@ from metrics import MinADE
 from metrics import MinFDE
 from modules import Backbone
 from modules import MapEncoder
+from visualization import trajectory_visualization
 
 from utils import generate_target
 from utils import generate_predict_mask
@@ -174,6 +175,9 @@ class HPNet(pl.LightningModule):
         self.log('val_MR', self.MR, prog_bar=True, on_step=False, on_epoch=True, batch_size=num_agents, sync_dist=True)
         self.log('val_brier_minFDE', self.brier_minFDE, prog_bar=True, on_step=False, on_epoch=True, batch_size=num_agents, sync_dist=True)
 
+        # vis
+        # trajectory_visualization(data, traj_output, is_test=False)
+
 
     def test_step(self,data,batch_idx):
         traj_propose, traj_output, prob_output = self(data)               #[(N1,...,Nb),H,K,F,2],[(N1,...,Nb),H,K,F,2],[(N1,...,Nb),H,K]
@@ -193,6 +197,9 @@ class HPNet(pl.LightningModule):
 
             self.test_traj_output[id] = traj
             self.test_prob_output[id] = prob
+
+        # vis
+        # trajectory_visualization(data, traj_output, is_test=True)
 
 
     def on_test_end(self):
