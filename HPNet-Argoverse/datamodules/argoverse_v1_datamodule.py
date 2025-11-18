@@ -21,12 +21,11 @@ class ArgoverseV1DataModule(pl.LightningDataModule):
                  num_workers: int = 0,
                  pin_memory: bool = True,
                  persistent_workers: bool = True,
-                 flip_p: float = 0.5,
-                 agent_occlusion_ratio: float = 0.05,
-                 lane_occlusion_ratio: float = 0.2,
+                 flip_p: float = 0.0,
+                 agent_occlusion_ratio: float = 0.0,
+                 lane_occlusion_ratio: float = 0.0,
                  num_historical_steps: int = 20,
                  num_future_steps: int = 30,
-                 margin: float = 50,
                  **kwargs) -> None:
         super(ArgoverseV1DataModule, self).__init__()
         self.root = root
@@ -36,19 +35,18 @@ class ArgoverseV1DataModule(pl.LightningDataModule):
         self.num_workers = num_workers
         self.pin_memory = pin_memory
         self.persistent_workers = persistent_workers and num_workers > 0
-        self.train_transform = Compose([HorizontalFlip(flip_p), AgentRandomOcclusion(agent_occlusion_ratio,num_historical_steps), LaneRandomOcclusion(lane_occlusion_ratio)])
+        self.train_transform = Compose([HorizontalFlip(flip_p), AgentRandomOcclusion(agent_occlusion_ratio, num_historical_steps), LaneRandomOcclusion(lane_occlusion_ratio)])
         self.val_transform = LaneRandomOcclusion(0.0)
         self.num_historical_steps = num_historical_steps
         self.num_future_steps = num_future_steps
-        self.margin = margin
 
     def prepare_data(self) -> None:
-        ArgoverseV1Dataset(self.root, 'train', self.train_transform, self.num_historical_steps, self.num_future_steps, self.margin)
-        ArgoverseV1Dataset(self.root, 'val', self.val_transform, self.num_historical_steps, self.num_future_steps, self.margin)
+        ArgoverseV1Dataset(self.root, 'train', self.train_transform, self.num_historical_steps, self.num_future_steps)
+        ArgoverseV1Dataset(self.root, 'val', self.val_transform, self.num_historical_steps, self.num_future_steps)
 
     def setup(self, stage: Optional[str] = None) -> None:
-        self.train_dataset = ArgoverseV1Dataset(self.root, 'train', self.train_transform, self.num_historical_steps, self.num_future_steps, self.margin)
-        self.val_dataset = ArgoverseV1Dataset(self.root, 'val', self.val_transform, self.num_historical_steps, self.num_future_steps, self.margin)
+        self.train_dataset = ArgoverseV1Dataset(self.root, 'train', self.train_transform, self.num_historical_steps, self.num_future_steps)
+        self.val_dataset = ArgoverseV1Dataset(self.root, 'val', self.val_transform, self.num_historical_steps, self.num_future_steps)
 
     def train_dataloader(self):
         return DataLoader(self.train_dataset, batch_size=self.train_batch_size, shuffle=self.shuffle,

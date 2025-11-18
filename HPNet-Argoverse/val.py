@@ -28,6 +28,5 @@ if __name__ == '__main__':
     model = HPNet.load_from_checkpoint(checkpoint_path=args.ckpt_path)
     trainer = pl.Trainer(devices=args.devices, accelerator='gpu')
     val_dataset = ArgoverseV1Dataset(args.root, 'val', transform=LaneRandomOcclusion(0.0))
-    dataloader = DataLoader(val_dataset, batch_size=args.val_batch_size, shuffle=False,num_workers=args.num_workers, pin_memory=args.pin_memory,persistent_workers=args.persistent_workers)
+    dataloader = DataLoader(val_dataset, batch_size=args.val_batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=args.pin_memory, persistent_workers=args.persistent_workers)
     trainer.validate(model, dataloader)
-

@@ -1,2 +1,3 @@
-from losses.CEloss import CELoss
-from losses.huber_2d_loss import Huber2DLoss
+from losses.huber_traj_loss import HuberTrajLoss
+
+__all__ = ['HuberTrajLoss']

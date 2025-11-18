@@ -8,7 +8,7 @@ from datamodules import ArgoverseV1DataModule
 from model import HPNet
 
 import torch
-   
+
 
 if __name__ == '__main__':
     pl.seed_everything(1024, workers=True)
@@ -21,9 +21,9 @@ if __name__ == '__main__':
     parser.add_argument('--num_workers', type=int, default=4)
     parser.add_argument('--pin_memory', type=bool, default=True)
     parser.add_argument('--persistent_workers', type=bool, default=True)
-    parser.add_argument('--flip_p', type=float, default=0.5)
-    parser.add_argument('--agent_occlusion_ratio', type=float, default=0.05)
-    parser.add_argument('--lane_occlusion_ratio', type=float, default=0.2)
+    parser.add_argument('--flip_p', type=float, default=0.0)
+    parser.add_argument('--agent_occlusion_ratio', type=float, default=0.0)
+    parser.add_argument('--lane_occlusion_ratio', type=float, default=0.0)
     parser.add_argument('--devices', type=int, required=True)
     parser.add_argument('--max_epochs', type=int, default=64)
     HPNet.add_model_specific_args(parser)

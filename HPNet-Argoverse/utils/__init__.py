@@ -1,5 +1,6 @@
 from utils.init_weights import init_weights
 from utils.process_data import wrap_angle
+from utils.process_data import get_index_of_a_in_B
 from utils.process_data import get_index_of_A_in_B
 from utils.process_data import generate_clockwise_rotation_matrix
 from utils.process_data import generate_counterclockwise_rotation_matrix

@@ -3,22 +3,21 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch_geometric.data import Batch
+from torch_geometric.utils import unbatch
 import math
+import pandas as pd
 
-from argoverse.evaluation.competition_util import generate_forecasting_h5
-
-from losses import Huber2DLoss
-from losses import CELoss
-from metrics import BrierMinFDE
-from metrics import MR
+from losses import HuberTrajLoss
 from metrics import MinADE
 from metrics import MinFDE
+from metrics import MR
 from modules import Backbone
 from modules import MapEncoder
-from visualization import trajectory_visualization
 
 from utils import generate_target
 from utils import generate_predict_mask
+from utils import compute_angles_lengths_2D
+
 
 class HPNet(pl.LightningModule):
 
@@ -26,8 +25,7 @@ class HPNet(pl.LightningModule):
                  hidden_dim: int,
                  num_historical_steps: int,
                  num_future_steps: int,
-                 pos_duration: int,
-                 pred_duration: int,
+                 duration: int,
                  a2a_radius: float,
                  l2a_radius: float,
                  num_visible_steps: int,
@@ -46,8 +44,7 @@ class HPNet(pl.LightningModule):
         self.hidden_dim = hidden_dim
         self.num_historical_steps = num_historical_steps
         self.num_future_steps = num_future_steps
-        self.pos_duration = pos_duration
-        self.pred_duration = pred_duration
+        self.duration = duration
         self.a2a_radius = a2a_radius
         self.l2a_radius = l2a_radius
         self.num_visible_steps = num_visible_steps
@@ -65,8 +62,7 @@ class HPNet(pl.LightningModule):
             hidden_dim=hidden_dim,
             num_historical_steps=num_historical_steps,
             num_future_steps=num_future_steps,
-            pos_duration=pos_duration,
-            pred_duration=pred_duration,
+            duration=duration,
             a2a_radius=a2a_radius,
             l2a_radius=l2a_radius,
             num_attn_layers=num_attn_layers,
@@ -81,131 +77,190 @@ class HPNet(pl.LightningModule):
             dropout=dropout
         )
 
-        self.reg_loss = Huber2DLoss()
-        self.prob_loss = CELoss()
+        self.reg_loss_traj = HuberTrajLoss()
 
-        self.brier_minFDE = BrierMinFDE()
         self.minADE = MinADE()
         self.minFDE = MinFDE()
         self.MR = MR()
 
-        self.test_traj_output = dict()
-        self.test_prob_output = dict()
+        self._columns = ['case_id', 'track_id', 'frame_id', 'timestamp_ms',
+                         'x1', 'y1', 'psi_rad1', 'prob1',
+                         'x2', 'y2', 'psi_rad2', 'prob2',
+                         'x3', 'y3', 'psi_rad3', 'prob3',
+                         'x4', 'y4', 'psi_rad4', 'prob4',
+                         'x5', 'y5', 'psi_rad5', 'prob5',
+                         'x6', 'y6', 'psi_rad6', 'prob6']
+        self.test_output = dict()
 
-    def forward(self, 
+    def forward(self,
                 data: Batch):
         lane_embs = self.MapEncoder(data=data)
         pred = self.Backbone(data=data, l_embs=lane_embs)
         return pred
 
-    def training_step(self,data,batch_idx):
-        traj_propose, traj_output, prob_output = self(data)               #[(N1,...,Nb),H,K,F,2],[(N1,...,Nb),H,K,F,2],[(N1,...,Nb),H,K]
-        target_traj, target_mask = generate_target(position=data['agent']['position'], 
+    def training_step(self, data, batch_idx):
+        traj_propose, traj_output = self(data)
+
+        agent_mask = data['agent']['category'] == 1
+        traj_propose = traj_propose[agent_mask]
+        traj_output = traj_output[agent_mask]
+
+        target_traj, target_mask = generate_target(position=data['agent']['position'],
                                                    mask=data['agent']['visible_mask'],
                                                    num_historical_steps=self.num_historical_steps,
-                                                   num_future_steps=self.num_future_steps)  #[(N1,...Nb),H,F,2],[(N1,...Nb),H,F]
+                                                   num_future_steps=self.num_future_steps)
 
-        errors = (torch.norm(traj_propose[...,:2] - target_traj.unsqueeze(2), p=2, dim=-1) * target_mask.unsqueeze(2)).sum(dim=-1)  #[(N1,...Nb),H,K]
-        best_mode_index = errors.argmin(dim=-1)     #[(N1,...Nb),H]
-        traj_best_propose = traj_propose[torch.arange(traj_propose.size(0))[:, None], torch.arange(traj_propose.size(1))[None, :], best_mode_index]   #[(N1,...Nb),H,F,2]
-        traj_best_output = traj_output[torch.arange(traj_output.size(0))[:, None], torch.arange(traj_output.size(1))[None, :], best_mode_index]   #[(N1,...Nb),H,F,2]
+        target_traj = target_traj[agent_mask]
+        target_mask = target_mask[agent_mask]
 
-        predict_mask = generate_predict_mask(data['agent']['visible_mask'][:,:self.num_historical_steps], self.num_visible_steps)   #[(N1,...Nb),H]
-        targ_mask = target_mask[predict_mask]                             #[Na,F]
-        traj_pro = traj_best_propose[predict_mask]                        #[Na,F,2]
-        traj_ref = traj_best_output[predict_mask]                         #[Na,F,2]
-        prob = prob_output[predict_mask]                                  #[Na,K]
-        targ = target_traj[predict_mask]                                  #[Na,F,2]
-        label = best_mode_index[predict_mask]                             #[Na]
+        agent_batch = data['agent']['batch'][agent_mask]
+        batch_size = len(data['case_id'])
+        errors = (torch.norm(traj_propose - target_traj.unsqueeze(2), p=2, dim=-1) * target_mask.unsqueeze(2)).sum(dim=-1)
+        joint_errors = [error.sum(dim=0, keepdim=True) for error in unbatch(errors, agent_batch)]
+        joint_errors = torch.cat(joint_errors, dim=0)
 
-        reg_loss_propose = self.reg_loss(traj_pro[targ_mask], targ[targ_mask]) 
-        reg_loss_refine = self.reg_loss(traj_ref[targ_mask], targ[targ_mask])    
-        prob_loss = self.prob_loss(prob, label)
-        loss = reg_loss_propose + reg_loss_refine + prob_loss
-        self.log('train_reg_loss_propose', reg_loss_propose, prog_bar=True, on_step=True, on_epoch=True, batch_size=1, sync_dist=True)
-        self.log('train_reg_loss_refine', reg_loss_refine, prog_bar=True, on_step=True, on_epoch=True, batch_size=1, sync_dist=True)
-        self.log('train_prob_loss', prob_loss, prog_bar=True, on_step=True, on_epoch=True, batch_size=1, sync_dist=True)
+        num_agent_pre_batch = torch.bincount(agent_batch)
+        best_mode_index = joint_errors.argmin(dim=-1)
+        best_mode_index = best_mode_index.repeat_interleave(num_agent_pre_batch, 0)
+        traj_best_propose = traj_propose[torch.arange(traj_propose.size(0))[:, None], torch.arange(traj_propose.size(1))[None, :], best_mode_index]
+        traj_best_output = traj_output[torch.arange(traj_output.size(0))[:, None], torch.arange(traj_output.size(1))[None, :], best_mode_index]
+
+        predict_mask = generate_predict_mask(data['agent']['visible_mask'][agent_mask, :self.num_historical_steps], self.num_visible_steps)
+        targ_mask = target_mask[predict_mask]
+        traj_pro = traj_best_propose[predict_mask]
+        traj_ref = traj_best_output[predict_mask]
+        targ_traj = target_traj[predict_mask]
+
+        reg_loss_traj_propose = self.reg_loss_traj(traj_pro[targ_mask], targ_traj[targ_mask])
+        reg_loss_traj_refine = self.reg_loss_traj(traj_ref[targ_mask], targ_traj[targ_mask])
+        loss = reg_loss_traj_propose + reg_loss_traj_refine
+        self.log('train_reg_loss_traj_propose', reg_loss_traj_propose, prog_bar=True, on_step=True, on_epoch=True, batch_size=1, sync_dist=True)
+        self.log('train_reg_loss_traj_refine', reg_loss_traj_refine, prog_bar=True, on_step=True, on_epoch=True, batch_size=1, sync_dist=True)
         self.log('train_loss', loss, prog_bar=True, on_step=True, on_epoch=True, batch_size=1, sync_dist=True)
 
         return loss
 
-    def validation_step(self,data,batch_idx):
-        traj_propose, traj_output, prob_output = self(data)               #[(N1,...,Nb),H,K,F,2],[(N1,...,Nb),H,K,F,2],[(N1,...,Nb),H,K]
-        target_traj, target_mask = generate_target(position=data['agent']['position'], 
+    def validation_step(self, data, batch_idx):
+        traj_propose, traj_output = self(data)
+
+        agent_mask = data['agent']['category'] == 1
+        traj_propose = traj_propose[agent_mask]
+        traj_output = traj_output[agent_mask]
+
+        target_traj, target_mask = generate_target(position=data['agent']['position'],
                                                    mask=data['agent']['visible_mask'],
                                                    num_historical_steps=self.num_historical_steps,
-                                                   num_future_steps=self.num_future_steps)  #[(N1,...Nb),H,F,2],[(N1,...Nb),H,F]
+                                                   num_future_steps=self.num_future_steps)
+        target_traj = target_traj[agent_mask]
+        target_mask = target_mask[agent_mask]
 
-        errors = (torch.norm(traj_propose[...,:2] - target_traj.unsqueeze(2), p=2, dim=-1) * target_mask.unsqueeze(2)).sum(dim=-1)  #[(N1,...Nb),H,K]
-        best_mode_index = errors.argmin(dim=-1)     #[(N1,...Nb),H]
-        traj_best_propose = traj_propose[torch.arange(traj_propose.size(0))[:, None], torch.arange(traj_propose.size(1))[None, :], best_mode_index]   #[(N1,...Nb),H,F,2]
-        traj_best_output = traj_output[torch.arange(traj_output.size(0))[:, None], torch.arange(traj_output.size(1))[None, :], best_mode_index]   #[(N1,...Nb),H,F,2]
+        agent_batch = data['agent']['batch'][agent_mask]
+        batch_size = len(data['case_id'])
+        errors = (torch.norm(traj_propose - target_traj.unsqueeze(2), p=2, dim=-1) * target_mask.unsqueeze(2)).sum(dim=-1)
+        joint_errors = [error.sum(dim=0, keepdim=True) for error in unbatch(errors, agent_batch)]
+        joint_errors = torch.cat(joint_errors, dim=0)
 
-        predict_mask = generate_predict_mask(data['agent']['visible_mask'][:,:self.num_historical_steps], self.num_visible_steps)   #[(N1,...Nb),H]
-        targ_mask = target_mask[predict_mask]                             #[Na,F]
-        traj_pro = traj_best_propose[predict_mask]                        #[Na,F,2]
-        traj_ref = traj_best_output[predict_mask]                         #[Na,F,2]
-        prob = prob_output[predict_mask]                                  #[Na,K]
-        targ = target_traj[predict_mask]                                  #[Na,F,2]
-        label = best_mode_index[predict_mask]                             #[Na]
+        num_agent_pre_batch = torch.bincount(agent_batch)
+        best_mode_index = joint_errors.argmin(dim=-1)
+        best_mode_index = best_mode_index.repeat_interleave(num_agent_pre_batch, 0)
+        traj_best_propose = traj_propose[torch.arange(traj_propose.size(0))[:, None], torch.arange(traj_propose.size(1))[None, :], best_mode_index]
+        traj_best_output = traj_output[torch.arange(traj_output.size(0))[:, None], torch.arange(traj_output.size(1))[None, :], best_mode_index]
 
-        reg_loss_propose = self.reg_loss(traj_pro[targ_mask], targ[targ_mask]) 
-        reg_loss_refine = self.reg_loss(traj_ref[targ_mask], targ[targ_mask])    
-        prob_loss = self.prob_loss(prob, label)
-        loss = reg_loss_propose + reg_loss_refine + prob_loss
-        self.log('val_reg_loss_propose', reg_loss_propose, prog_bar=True, on_step=False, on_epoch=True, batch_size=1, sync_dist=True)
-        self.log('val_reg_loss_refine', reg_loss_refine, prog_bar=True, on_step=False, on_epoch=True, batch_size=1, sync_dist=True)
-        self.log('val_prob_loss', prob_loss, prog_bar=True, on_step=False, on_epoch=True, batch_size=1, sync_dist=True)
+        predict_mask = generate_predict_mask(data['agent']['visible_mask'][agent_mask, :self.num_historical_steps], self.num_visible_steps)
+        targ_mask = target_mask[predict_mask]
+        traj_pro = traj_best_propose[predict_mask]
+        traj_ref = traj_best_output[predict_mask]
+        targ_traj = target_traj[predict_mask]
+
+        reg_loss_traj_propose = self.reg_loss_traj(traj_pro[targ_mask], targ_traj[targ_mask])
+        reg_loss_traj_refine = self.reg_loss_traj(traj_ref[targ_mask], targ_traj[targ_mask])
+        loss = reg_loss_traj_propose + reg_loss_traj_refine
+        self.log('val_reg_loss_traj_propose', reg_loss_traj_propose, prog_bar=True, on_step=False, on_epoch=True, batch_size=1, sync_dist=True)
+        self.log('val_reg_loss_traj_refine', reg_loss_traj_refine, prog_bar=True, on_step=False, on_epoch=True, batch_size=1, sync_dist=True)
         self.log('val_loss', loss, prog_bar=True, on_step=False, on_epoch=True, batch_size=1, sync_dist=True)
 
-        agent_index = data['agent']['agent_index'] + data['agent']['ptr'][:-1]
-        num_agents = agent_index.size(0)
-        agent_traj = traj_output[agent_index, -1]                           #[N,K,F,2]
-        agent_prob = prob_output[agent_index, -1]                           #[N,K]
-        agent_targ = target_traj[agent_index, -1]                           #[N,F,2]
-        fde = torch.norm(agent_traj[:, :, -1, :2] - agent_targ[:,-1, :2].unsqueeze(1), p=2, dim=-1)     #[N,K]
-        best_mode_index = fde.argmin(dim=-1)    #[N] 
-        agent_traj_best = agent_traj[torch.arange(num_agents), best_mode_index]   #[N,F,2]
-        self.brier_minFDE.update(agent_traj_best[..., :2], agent_targ[..., :2], agent_prob[torch.arange(num_agents),best_mode_index])
-        self.minADE.update(agent_traj_best[..., :2], agent_targ[..., :2])
-        self.minFDE.update(agent_traj_best[..., :2], agent_targ[..., :2])
-        self.MR.update(agent_traj_best[..., :2], agent_targ[..., :2])
-        self.log('val_minADE', self.minADE, prog_bar=True, on_step=False, on_epoch=True, batch_size=num_agents, sync_dist=True)
-        self.log('val_minFDE', self.minFDE, prog_bar=True, on_step=False, on_epoch=True, batch_size=num_agents, sync_dist=True)
-        self.log('val_MR', self.MR, prog_bar=True, on_step=False, on_epoch=True, batch_size=num_agents, sync_dist=True)
-        self.log('val_brier_minFDE', self.brier_minFDE, prog_bar=True, on_step=False, on_epoch=True, batch_size=num_agents, sync_dist=True)
+        visible_mask = data['agent']['visible_mask'][agent_mask]
+        visible_num = visible_mask.sum(dim=-1)
+        scored_mask = visible_num == self.num_historical_steps + self.num_future_steps
 
-        # vis
-        # trajectory_visualization(data, traj_output, is_test=False)
+        if scored_mask.sum() > 0:
+            scored_traj_output = traj_output[scored_mask, -1]
+            scored_target_traj = target_traj[scored_mask, -1]
+            scored_target_mask = target_mask[scored_mask, -1]
 
+            # Compute minADE and minFDE
+            fde = torch.norm(scored_traj_output[:, :, -1, :2] - scored_target_traj[:, -1, :2].unsqueeze(1), p=2, dim=-1)
+            best_mode = fde.argmin(dim=-1)
+            best_traj = scored_traj_output[torch.arange(scored_traj_output.size(0)), best_mode]
 
-    def test_step(self,data,batch_idx):
-        traj_propose, traj_output, prob_output = self(data)               #[(N1,...,Nb),H,K,F,2],[(N1,...,Nb),H,K,F,2],[(N1,...,Nb),H,K]
-        
-        prob_output = prob_output**2
-        prob_output = prob_output / prob_output.sum(dim=-1, keepdim=True)
+            self.minADE.update(best_traj[..., :2], scored_target_traj[..., :2])
+            self.minFDE.update(best_traj[..., :2], scored_target_traj[..., :2])
+            self.MR.update(best_traj[..., :2], scored_target_traj[..., :2])
 
-        agent_index = data['agent']['agent_index'] + data['agent']['ptr'][:-1]
-        num_agents = agent_index.size(0)
-        agent_traj = traj_output[agent_index, -1]           #[N,K,F,2]
-        agent_prob = prob_output[agent_index, -1]           #[N,K]
+            num_scored = scored_mask.sum().item()
+            self.log('val_minADE', self.minADE, prog_bar=True, on_step=False, on_epoch=True, batch_size=num_scored, sync_dist=True)
+            self.log('val_minFDE', self.minFDE, prog_bar=True, on_step=False, on_epoch=True, batch_size=num_scored, sync_dist=True)
+            self.log('val_MR', self.MR, prog_bar=True, on_step=False, on_epoch=True, batch_size=num_scored, sync_dist=True)
 
-        for i in range(num_agents):
-            id = int(data['scenario_id'][i])
-            traj = agent_traj[i].cpu().numpy()
-            prob = agent_prob[i].tolist()
+    def test_step(self, data, batch_idx):
+        traj_propose, traj_output = self(data)
 
-            self.test_traj_output[id] = traj
-            self.test_prob_output[id] = prob
+        agent_mask = data['agent']['category'] == 1
+        agent_batch = data['agent']['batch'][agent_mask]
+        batch_size = len(data['case_id'])
+        num_agent_pre_batch = torch.bincount(agent_batch)
 
-        # vis
-        # trajectory_visualization(data, traj_output, is_test=True)
+        scenario_name = data['scenario_name']
+        case_id = data['case_id']
+        agent_id = data['agent']['id'][agent_mask]
+        traj_output = traj_output[agent_mask, -1]
 
+        # Compute yaw from trajectory
+        tep = torch.cat([data['agent']['position'][agent_mask, -1:].unsqueeze(1).repeat_interleave(self.num_modes, 1), traj_output], dim=-2)
+        _, yaw_output = compute_angles_lengths_2D(tep[:, :, 1:] - tep[:, :, :-1])
+
+        # Compute mode probabilities based on trajectory consistency
+        prob_output = torch.ones(traj_output.size(0), self.num_modes, device=traj_output.device) / self.num_modes
+
+        scored_agent_id = unbatch(agent_id, agent_batch)
+        scored_predict_traj = unbatch(traj_output, agent_batch)
+        scored_predict_yaw = unbatch(yaw_output, agent_batch)
+        scored_prob = unbatch(prob_output, agent_batch)
+
+        case_id = case_id.cpu().numpy()
+        scored_agent_id = [agent_id.cpu().numpy() for agent_id in scored_agent_id]
+        scored_predict_traj = [predict_traj.cpu().numpy() for predict_traj in scored_predict_traj]
+        scored_predict_yaw = [predict_yaw.cpu().numpy() for predict_yaw in scored_predict_yaw]
+        scored_prob = [prob.cpu().numpy() for prob in scored_prob]
+
+        scored_frame_id = list(range(self.num_future_steps))
+        scored_frame_id = [id + self.num_historical_steps + 1 for id in scored_frame_id]
+        scored_timestamp_ms = [frame_id * 100 for frame_id in scored_frame_id]
+
+        for i in range(batch_size):
+            rows = []
+            for j in range(num_agent_pre_batch[i]):
+                for k in range(self.num_future_steps):
+                    row = [case_id[i], scored_agent_id[i][j], scored_frame_id[k], scored_timestamp_ms[k],
+                           scored_predict_traj[i][j, 0, k, 0], scored_predict_traj[i][j, 0, k, 1], scored_predict_yaw[i][j, 0, k], scored_prob[i][j, 0],
+                           scored_predict_traj[i][j, 1, k, 0], scored_predict_traj[i][j, 1, k, 1], scored_predict_yaw[i][j, 1, k], scored_prob[i][j, 1],
+                           scored_predict_traj[i][j, 2, k, 0], scored_predict_traj[i][j, 2, k, 1], scored_predict_yaw[i][j, 2, k], scored_prob[i][j, 2],
+                           scored_predict_traj[i][j, 3, k, 0], scored_predict_traj[i][j, 3, k, 1], scored_predict_yaw[i][j, 3, k], scored_prob[i][j, 3],
+                           scored_predict_traj[i][j, 4, k, 0], scored_predict_traj[i][j, 4, k, 1], scored_predict_yaw[i][j, 4, k], scored_prob[i][j, 4],
+                           scored_predict_traj[i][j, 5, k, 0], scored_predict_traj[i][j, 5, k, 1], scored_predict_yaw[i][j, 5, k], scored_prob[i][j, 5]]
+                    rows.append(row)
+
+            if scenario_name[i] in self.test_output:
+                self.test_output[scenario_name[i]] = self.test_output[scenario_name[i]] + rows
+            else:
+                self.test_output[scenario_name[i]] = rows
 
     def on_test_end(self):
-        output_path = './test_output'
-        filename = 'submission'
-        generate_forecasting_h5(self.test_traj_output, output_path, filename, self.test_prob_output)
+        import os
+        os.makedirs('./test_output', exist_ok=True)
+        for key, value in self.test_output.items():
+            df = pd.DataFrame(value, columns=self._columns)
+            df.to_csv('./test_output/' + key + '_predictions.csv', index=False)
 
     def configure_optimizers(self):
         decay = set()
@@ -239,7 +294,7 @@ class HPNet(pl.LightningModule):
         ]
 
         optimizer = torch.optim.AdamW(optim_groups, lr=self.lr, weight_decay=self.weight_decay)
-        
+
         warmup_epochs = self.warmup_epochs
         T_max = self.T_max
 
@@ -261,17 +316,16 @@ class HPNet(pl.LightningModule):
         parser.add_argument('--hidden_dim', type=int, default=128)
         parser.add_argument('--num_historical_steps', type=int, default=20)
         parser.add_argument('--num_future_steps', type=int, default=30)
-        parser.add_argument('--pos_duration', type=int, default=20)
-        parser.add_argument('--pred_duration', type=int, default=20)
-        parser.add_argument('--a2a_radius', type=float, default=50)
-        parser.add_argument('--l2a_radius', type=float, default=50)
+        parser.add_argument('--duration', type=int, default=20)
+        parser.add_argument('--a2a_radius', type=float, default=80)
+        parser.add_argument('--l2a_radius', type=float, default=80)
         parser.add_argument('--num_visible_steps', type=int, default=2)
         parser.add_argument('--num_modes', type=int, default=6)
-        parser.add_argument('--num_attn_layers', type=int, default=2)
+        parser.add_argument('--num_attn_layers', type=int, default=3)
         parser.add_argument('--num_hops', type=int, default=4)
         parser.add_argument('--num_heads', type=int, default=8)
         parser.add_argument('--dropout', type=float, default=0.1)
-        parser.add_argument('--lr', type=float, default=3e-4)
+        parser.add_argument('--lr', type=float, default=5e-4)
         parser.add_argument('--weight_decay', type=float, default=1e-4)
         parser.add_argument('--warmup_epochs', type=int, default=4)
         parser.add_argument('--T_max', type=int, default=64)
